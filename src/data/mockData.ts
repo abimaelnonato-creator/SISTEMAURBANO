@@ -1,0 +1,585 @@
+import type { 
+  Demand, 
+  Secretaria, 
+  Category, 
+  Activity, 
+  User,
+  TimeSeriesData,
+  DemandsByNeighborhood,
+  DemandsByCategory 
+} from '@/types'
+
+// =============================================
+// SEMSUR - Secretaria Municipal de Serviços Urbanos
+// Parnamirim/RN
+// =============================================
+
+// Informações oficiais da SEMSUR
+export const SEMSUR_INFO = {
+  nome: 'Secretaria Municipal de Serviços Urbanos',
+  sigla: 'SEMSUR',
+  endereco: 'Rua Frei Henrique de Coimbra, nº 235, Emaús - Parnamirim/RN',
+  horarioAtendimento: 'Segunda a Sexta, das 7h30 às 13h30',
+  contatos: {
+    callCenter: '0800-281-6400',
+    iluminacao: '(84) 3644-8243',
+    protocolo: '(84) 3644-8421',
+    gabinete: '(84) 3644-8420',
+  },
+  enderecoMercados: 'Avenida Tenente Medeiros, 83, Centro',
+  horarioCallCenter: '7h às 18h',
+  portalDigital: 'Parnamirim Digital',
+  servicos: [
+    'Iluminação Pública (LED)',
+    'Limpeza Urbana',
+    'Manutenção de Praças',
+    'Manutenção de Mercados',
+    'Drenagem e Galerias',
+    'Infraestrutura Urbana',
+  ],
+}
+
+// Neighborhoods of Parnamirim/RN
+export const neighborhoods = [
+  'Centro',
+  'Nova Parnamirim',
+  'Emaús',
+  'Parque Industrial',
+  'Passagem de Areia',
+  'Rosa dos Ventos',
+  'Parque das Nações',
+  'Liberdade',
+  'Boa Esperança',
+  'Cohabinal',
+  'Monte Castelo',
+  'Pirangi do Norte',
+  'Pium',
+  'Cotovelo',
+  'Santa Tereza',
+]
+
+// SEMSUR é a única secretaria do sistema
+export const mockSecretarias: Secretaria[] = [
+  {
+    id: '1',
+    name: 'Secretaria Municipal de Serviços Urbanos',
+    slug: 'semsur',
+    description: 'Iluminação pública, limpeza urbana, manutenção de praças, mercados e infraestrutura',
+    icon: 'Building2',
+    color: '#0EA5E9',
+    categories: [],
+    totalDemandas: 544,
+    demandasAbertas: 149,
+    demandasEmAndamento: 107,
+    demandasResolvidas: 288,
+  },
+]
+
+// Categorias exclusivas da SEMSUR
+export const mockCategories: Category[] = [
+  // 💡 Iluminação Pública
+  { id: '1', name: 'Poste Apagado', slug: 'poste-apagado', secretariaId: '1', slaHours: 24, isActive: true },
+  { id: '2', name: 'Lâmpada LED Queimada', slug: 'lampada-led', secretariaId: '1', slaHours: 24, isActive: true },
+  { id: '3', name: 'Fiação Exposta', slug: 'fiacao-exposta', secretariaId: '1', slaHours: 12, isActive: true },
+  { id: '4', name: 'Poste Danificado/Tombado', slug: 'poste-danificado', secretariaId: '1', slaHours: 8, isActive: true },
+  
+  // 🧹 Limpeza Urbana
+  { id: '5', name: 'Coleta de Lixo', slug: 'coleta-lixo', secretariaId: '1', slaHours: 24, isActive: true },
+  { id: '6', name: 'Lixo/Entulho Acumulado', slug: 'lixo-entulho', secretariaId: '1', slaHours: 48, isActive: true },
+  { id: '7', name: 'Varrição de Ruas', slug: 'varricao', secretariaId: '1', slaHours: 72, isActive: true },
+  { id: '8', name: 'Descarte Irregular', slug: 'descarte-irregular', secretariaId: '1', slaHours: 48, isActive: true },
+  
+  // 🌳 Praças e Jardins
+  { id: '9', name: 'Manutenção de Praça', slug: 'manutencao-praca', secretariaId: '1', slaHours: 120, isActive: true },
+  { id: '10', name: 'Poda de Árvores', slug: 'poda-arvores', secretariaId: '1', slaHours: 168, isActive: true },
+  { id: '11', name: 'Capinação/Roçagem', slug: 'capinacao', secretariaId: '1', slaHours: 96, isActive: true },
+  { id: '12', name: 'Banco/Mobiliário Danificado', slug: 'mobiliario-danificado', secretariaId: '1', slaHours: 120, isActive: true },
+  
+  // 🏪 Mercados e Cemitérios
+  { id: '13', name: 'Manutenção de Mercado', slug: 'manutencao-mercado', secretariaId: '1', slaHours: 72, isActive: true },
+  { id: '14', name: 'Manutenção de Cemitério', slug: 'manutencao-cemiterio', secretariaId: '1', slaHours: 72, isActive: true },
+  
+  // 🌊 Drenagem
+  { id: '15', name: 'Bueiro Entupido', slug: 'bueiro-entupido', secretariaId: '1', slaHours: 24, isActive: true },
+  { id: '16', name: 'Alagamento', slug: 'alagamento', secretariaId: '1', slaHours: 12, isActive: true },
+  { id: '17', name: 'Galeria/Canal Obstruído', slug: 'galeria-obstruida', secretariaId: '1', slaHours: 48, isActive: true },
+  
+  // 🛠️ Infraestrutura Geral
+  { id: '18', name: 'Calçada Danificada', slug: 'calcada-danificada', secretariaId: '1', slaHours: 120, isActive: true },
+  { id: '19', name: 'Buraco em Via', slug: 'buraco-via', secretariaId: '1', slaHours: 72, isActive: true },
+  { id: '20', name: 'Outros Serviços', slug: 'outros', secretariaId: '1', slaHours: 168, isActive: true },
+]
+
+// Mock Users (equipe SEMSUR)
+export const mockUsers: User[] = [
+  {
+    id: '1',
+    name: 'Administrador SEMSUR',
+    email: 'admin@semsur.parnamirim.rn.gov.br',
+    role: 'admin',
+    isActive: true,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
+  },
+  {
+    id: '2',
+    name: 'Coordenador de Iluminação',
+    email: 'iluminacao@semsur.parnamirim.rn.gov.br',
+    role: 'secretario',
+    secretariaId: '1',
+    phone: '(84) 3644-8243',
+    isActive: true,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
+  },
+  {
+    id: '3',
+    name: 'Supervisor de Limpeza',
+    email: 'limpeza@semsur.parnamirim.rn.gov.br',
+    role: 'operador',
+    secretariaId: '1',
+    phone: '(84) 3644-8421',
+    isActive: true,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
+  },
+  {
+    id: '4',
+    name: 'Coordenador de Praças',
+    email: 'pracas@semsur.parnamirim.rn.gov.br',
+    role: 'operador',
+    secretariaId: '1',
+    phone: '(84) 3644-8420',
+    isActive: true,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
+  },
+  {
+    id: '5',
+    name: 'Fiscal de Mercados',
+    email: 'mercados@semsur.parnamirim.rn.gov.br',
+    role: 'operador',
+    secretariaId: '1',
+    phone: '(84) 3644-8421',
+    isActive: true,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
+  },
+]
+
+// Generate random coordinates around Parnamirim/RN
+const generateCoordinates = () => {
+  // Parnamirim center: -5.9157, -35.2628
+  const lat = -5.9157 + (Math.random() - 0.5) * 0.1
+  const lng = -35.2628 + (Math.random() - 0.5) * 0.1
+  return { latitude: lat, longitude: lng }
+}
+
+// Mock Demands (demandas SEMSUR)
+export const mockDemands: Demand[] = [
+  {
+    id: '1',
+    protocol: '2026000001',
+    title: 'Poste apagado na Rua Principal',
+    description: 'Poste em frente ao número 150 está apagado há 3 dias. A rua fica muito escura à noite, oferecendo risco à segurança dos moradores.',
+    status: 'aberta',
+    priority: 'alta',
+    source: 'whatsapp',
+    address: 'Rua Principal, 150',
+    neighborhood: 'Centro',
+    ...generateCoordinates(),
+    categoryId: '1',
+    secretariaId: '1',
+    citizenName: 'Francisco Almeida',
+    citizenPhone: '(84) 99888-7766',
+    images: ['/placeholder-image.jpg'],
+    attachments: [],
+    history: [
+      {
+        id: '1',
+        demandId: '1',
+        action: 'Demanda criada',
+        description: 'Demanda registrada via WhatsApp SEMSUR',
+        userId: '1',
+        createdAt: '2026-01-05T10:30:00Z',
+      },
+    ],
+    comments: [],
+    createdAt: '2026-01-05T10:30:00Z',
+    updatedAt: '2026-01-05T10:30:00Z',
+    slaDeadline: '2026-01-06T10:30:00Z',
+  },
+  {
+    id: '2',
+    protocol: '2026000002',
+    title: 'Lixo acumulado em terreno baldio',
+    description: 'Moradores estão descartando lixo e entulho em terreno baldio. Há risco de proliferação de dengue.',
+    status: 'em_andamento',
+    priority: 'media',
+    source: 'whatsapp',
+    address: 'Av. Brigadeiro Everaldo Breves, 500',
+    neighborhood: 'Nova Parnamirim',
+    ...generateCoordinates(),
+    categoryId: '6',
+    secretariaId: '1',
+    assignedToId: '3',
+    citizenName: 'Maria Clara Souza',
+    citizenPhone: '(84) 99777-5544',
+    images: ['/placeholder-image.jpg'],
+    attachments: [],
+    history: [
+      {
+        id: '2',
+        demandId: '2',
+        action: 'Demanda criada',
+        description: 'Demanda registrada via WhatsApp SEMSUR',
+        userId: '1',
+        createdAt: '2026-01-04T14:20:00Z',
+      },
+      {
+        id: '3',
+        demandId: '2',
+        action: 'Status alterado',
+        description: 'Equipe de limpeza encaminhada ao local',
+        userId: '3',
+        previousStatus: 'aberta',
+        newStatus: 'em_andamento',
+        createdAt: '2026-01-05T09:00:00Z',
+      },
+    ],
+    comments: [],
+    createdAt: '2026-01-04T14:20:00Z',
+    updatedAt: '2026-01-05T09:00:00Z',
+    slaDeadline: '2026-01-06T14:20:00Z',
+  },
+  {
+    id: '3',
+    protocol: '2026000003',
+    title: 'Bueiro entupido causando alagamento',
+    description: 'O bueiro da esquina está completamente entupido. Quando chove, a água alaga toda a rua e entra nas casas.',
+    status: 'aberta',
+    priority: 'urgente',
+    source: 'telefone',
+    address: 'Rua dos Girassóis, 42',
+    neighborhood: 'Emaús',
+    ...generateCoordinates(),
+    categoryId: '15',
+    secretariaId: '1',
+    citizenName: 'José Antônio Pereira',
+    citizenPhone: '(84) 99666-3322',
+    images: ['/placeholder-image.jpg', '/placeholder-image.jpg'],
+    attachments: [],
+    history: [
+      {
+        id: '4',
+        demandId: '3',
+        action: 'Demanda criada',
+        description: 'Demanda registrada via Call Center 0800-281-6400',
+        userId: '1',
+        createdAt: '2026-01-05T08:15:00Z',
+      },
+    ],
+    comments: [],
+    createdAt: '2026-01-05T08:15:00Z',
+    updatedAt: '2026-01-05T08:15:00Z',
+    slaDeadline: '2026-01-05T20:15:00Z',
+  },
+  {
+    id: '4',
+    protocol: '2026000004',
+    title: 'Praça com mato alto e banco quebrado',
+    description: 'A Praça Central está com mato muito alto e vários bancos quebrados. Os moradores não conseguem usar o espaço.',
+    status: 'resolvida',
+    priority: 'media',
+    source: 'whatsapp',
+    address: 'Praça Central, Centro',
+    neighborhood: 'Centro',
+    ...generateCoordinates(),
+    categoryId: '9',
+    secretariaId: '1',
+    assignedToId: '4',
+    citizenName: 'Carla Regina Melo',
+    citizenPhone: '(84) 99555-1199',
+    images: [],
+    attachments: [],
+    history: [
+      {
+        id: '5',
+        demandId: '4',
+        action: 'Demanda criada',
+        description: 'Demanda registrada via WhatsApp SEMSUR',
+        userId: '1',
+        createdAt: '2026-01-03T16:45:00Z',
+      },
+      {
+        id: '6',
+        demandId: '4',
+        action: 'Status alterado',
+        description: 'Equipe de praças enviada ao local',
+        userId: '4',
+        previousStatus: 'aberta',
+        newStatus: 'em_andamento',
+        createdAt: '2026-01-04T08:30:00Z',
+      },
+      {
+        id: '7',
+        demandId: '4',
+        action: 'Demanda resolvida',
+        description: 'Praça capinada e bancos reparados',
+        userId: '4',
+        previousStatus: 'em_andamento',
+        newStatus: 'resolvida',
+        createdAt: '2026-01-04T14:00:00Z',
+      },
+    ],
+    comments: [],
+    createdAt: '2026-01-03T16:45:00Z',
+    updatedAt: '2026-01-04T14:00:00Z',
+    resolvedAt: '2026-01-04T14:00:00Z',
+    slaDeadline: '2026-01-08T16:45:00Z',
+    resolutionTime: 21,
+    satisfactionRating: 5,
+  },
+  {
+    id: '5',
+    protocol: '2026000005',
+    title: 'Árvore caída bloqueando rua',
+    description: 'Uma árvore caiu durante a chuva de ontem à noite e está bloqueando completamente a passagem de veículos.',
+    status: 'em_andamento',
+    priority: 'urgente',
+    source: 'whatsapp',
+    address: 'Rua das Acácias, 200',
+    neighborhood: 'Rosa dos Ventos',
+    ...generateCoordinates(),
+    categoryId: '10',
+    secretariaId: '1',
+    assignedToId: '4',
+    citizenName: 'Roberto Lima',
+    citizenPhone: '(84) 99444-8877',
+    images: ['/placeholder-image.jpg'],
+    attachments: [],
+    history: [],
+    comments: [],
+    createdAt: '2026-01-05T06:00:00Z',
+    updatedAt: '2026-01-05T07:30:00Z',
+    slaDeadline: '2026-01-12T06:00:00Z',
+  },
+  {
+    id: '6',
+    protocol: '2026000006',
+    title: 'Coleta de lixo não realizada',
+    description: 'A coleta de lixo não passou na rua há 4 dias. O lixo está acumulado e causando mau cheiro.',
+    status: 'aberta',
+    priority: 'alta',
+    source: 'telefone',
+    address: 'Rua B, Lote 15',
+    neighborhood: 'Parque Industrial',
+    ...generateCoordinates(),
+    categoryId: '5',
+    secretariaId: '1',
+    citizenName: 'Francisca Moura',
+    citizenPhone: '(84) 99333-2211',
+    images: [],
+    attachments: [],
+    history: [],
+    comments: [],
+    createdAt: '2026-01-04T11:00:00Z',
+    updatedAt: '2026-01-04T11:00:00Z',
+    slaDeadline: '2026-01-05T11:00:00Z',
+  },
+  {
+    id: '7',
+    protocol: '2026000007',
+    title: 'Calçada quebrada em frente à escola',
+    description: 'A calçada em frente à escola municipal está muito danificada, oferecendo risco às crianças.',
+    status: 'aberta',
+    priority: 'alta',
+    source: 'whatsapp',
+    address: 'Rua da Educação, 100',
+    neighborhood: 'Centro',
+    ...generateCoordinates(),
+    categoryId: '18',
+    secretariaId: '1',
+    citizenName: 'Direção Escolar',
+    citizenPhone: '(84) 3643-0000',
+    images: [],
+    attachments: [],
+    history: [],
+    comments: [],
+    createdAt: '2026-01-03T09:30:00Z',
+    updatedAt: '2026-01-03T09:30:00Z',
+    slaDeadline: '2026-01-08T09:30:00Z',
+  },
+  {
+    id: '8',
+    protocol: '2026000008',
+    title: 'Vazamento na galeria de águas pluviais',
+    description: 'Há um vazamento grande na galeria de águas pluviais. A água está jorrando para a rua.',
+    status: 'resolvida',
+    priority: 'urgente',
+    source: 'whatsapp',
+    address: 'Cruzamento Rua A com Rua B',
+    neighborhood: 'Passagem de Areia',
+    ...generateCoordinates(),
+    categoryId: '17',
+    secretariaId: '1',
+    citizenName: 'Antônio Marcos',
+    citizenPhone: '(84) 99222-0000',
+    images: [],
+    attachments: [],
+    history: [],
+    comments: [],
+    createdAt: '2026-01-01T10:00:00Z',
+    updatedAt: '2026-01-03T15:00:00Z',
+    resolvedAt: '2026-01-03T15:00:00Z',
+    slaDeadline: '2026-01-03T10:00:00Z',
+    resolutionTime: 53,
+    satisfactionRating: 4,
+  },
+  {
+    id: '9',
+    protocol: '2026000009',
+    title: 'Mercado Municipal com goteiras',
+    description: 'O telhado do Mercado Municipal está com várias goteiras. Quando chove, alaga as bancas.',
+    status: 'em_andamento',
+    priority: 'media',
+    source: 'presencial',
+    address: 'Avenida Tenente Medeiros, 83',
+    neighborhood: 'Centro',
+    ...generateCoordinates(),
+    categoryId: '13',
+    secretariaId: '1',
+    citizenName: 'Associação de Feirantes',
+    citizenPhone: '(84) 99111-9999',
+    images: [],
+    attachments: [],
+    history: [],
+    comments: [],
+    createdAt: '2026-01-02T14:00:00Z',
+    updatedAt: '2026-01-04T10:00:00Z',
+    slaDeadline: '2026-01-05T14:00:00Z',
+  },
+  {
+    id: '10',
+    protocol: '2026000010',
+    title: 'Fiação de poste exposta oferecendo risco',
+    description: 'Fios de iluminação estão expostos e caindo do poste, oferecendo risco de choque elétrico.',
+    status: 'aberta',
+    priority: 'urgente',
+    source: 'telefone',
+    address: 'Av. Maria Lacerda, 800',
+    neighborhood: 'Boa Esperança',
+    ...generateCoordinates(),
+    categoryId: '3',
+    secretariaId: '1',
+    citizenName: 'Carlos Eduardo',
+    citizenPhone: '(84) 99000-8888',
+    images: ['/placeholder-image.jpg'],
+    attachments: [],
+    history: [],
+    comments: [],
+    createdAt: '2026-01-05T11:45:00Z',
+    updatedAt: '2026-01-05T11:45:00Z',
+    slaDeadline: '2026-01-05T23:45:00Z',
+  },
+]
+
+// Mock Activities (atividades SEMSUR)
+export const mockActivities: Activity[] = [
+  {
+    id: '1',
+    type: 'demand_created',
+    title: 'Nova demanda registrada via WhatsApp',
+    description: 'Poste apagado na Rua Principal - Centro',
+    demandId: '1',
+    userId: '1',
+    createdAt: '2026-01-05T10:30:00Z',
+  },
+  {
+    id: '2',
+    type: 'demand_resolved',
+    title: 'Demanda resolvida',
+    description: 'Praça com mato alto e banco quebrado - Centro',
+    demandId: '4',
+    userId: '4',
+    createdAt: '2026-01-04T14:00:00Z',
+  },
+  {
+    id: '3',
+    type: 'demand_updated',
+    title: 'Demanda atualizada',
+    description: 'Lixo acumulado - Equipe de limpeza encaminhada',
+    demandId: '2',
+    userId: '3',
+    createdAt: '2026-01-05T09:00:00Z',
+  },
+  {
+    id: '4',
+    type: 'demand_created',
+    title: 'Nova demanda urgente via Call Center',
+    description: 'Bueiro entupido causando alagamento - Emaús',
+    demandId: '3',
+    userId: '1',
+    createdAt: '2026-01-05T08:15:00Z',
+  },
+  {
+    id: '5',
+    type: 'demand_created',
+    title: 'Nova demanda urgente via WhatsApp',
+    description: 'Árvore caída bloqueando rua - Rosa dos Ventos',
+    demandId: '5',
+    userId: '1',
+    createdAt: '2026-01-05T06:00:00Z',
+  },
+]
+
+// Chart Data - Timeline (last 30 days)
+export const timeSeriesData: TimeSeriesData[] = Array.from({ length: 30 }, (_, i) => {
+  const date = new Date()
+  date.setDate(date.getDate() - (29 - i))
+  return {
+    date: date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+    abertas: Math.floor(Math.random() * 15) + 5,
+    resolvidas: Math.floor(Math.random() * 12) + 3,
+  }
+})
+
+// Chart Data - By Neighborhood
+export const demandsByNeighborhood: DemandsByNeighborhood[] = [
+  { neighborhood: 'Nova Parnamirim', total: 87, abertas: 25, resolvidas: 62 },
+  { neighborhood: 'Centro', total: 65, abertas: 18, resolvidas: 47 },
+  { neighborhood: 'Emaús', total: 54, abertas: 15, resolvidas: 39 },
+  { neighborhood: 'Rosa dos Ventos', total: 43, abertas: 12, resolvidas: 31 },
+  { neighborhood: 'Parque Industrial', total: 38, abertas: 10, resolvidas: 28 },
+  { neighborhood: 'Passagem de Areia', total: 32, abertas: 8, resolvidas: 24 },
+  { neighborhood: 'Boa Esperança', total: 28, abertas: 7, resolvidas: 21 },
+  { neighborhood: 'Liberdade', total: 25, abertas: 6, resolvidas: 19 },
+]
+
+// Chart Data - By Category (SEMSUR)
+export const demandsByCategory: DemandsByCategory[] = [
+  { category: 'Iluminação Pública', total: 156, percentage: 28.7, color: '#F59E0B' },
+  { category: 'Limpeza Urbana', total: 134, percentage: 24.6, color: '#10B981' },
+  { category: 'Praças e Jardins', total: 89, percentage: 16.4, color: '#8B5CF6' },
+  { category: 'Drenagem/Alagamentos', total: 76, percentage: 14.0, color: '#0EA5E9' },
+  { category: 'Calçadas/Infraestrutura', total: 58, percentage: 10.7, color: '#6366F1' },
+  { category: 'Mercados/Cemitérios', total: 18, percentage: 3.3, color: '#EC4899' },
+  { category: 'Outros', total: 13, percentage: 2.3, color: '#6B7280' },
+]
+
+// Monthly comparison data
+export const monthlyComparisonData = [
+  { month: 'Ago', abertas: 145, resolvidas: 132 },
+  { month: 'Set', abertas: 168, resolvidas: 155 },
+  { month: 'Out', abertas: 178, resolvidas: 162 },
+  { month: 'Nov', abertas: 195, resolvidas: 180 },
+  { month: 'Dez', abertas: 156, resolvidas: 148 },
+  { month: 'Jan', abertas: 187, resolvidas: 165 },
+]
+
+// Alias exports for convenience
+export const secretarias = mockSecretarias
+export const categories = mockCategories
+export const users = mockUsers
+export const demands = mockDemands
+export const activities = mockActivities

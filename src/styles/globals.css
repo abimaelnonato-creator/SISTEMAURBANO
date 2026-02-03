@@ -1,0 +1,1561 @@
+@import "tailwindcss";
+
+/* Tailwind CSS v4: Configurar dark mode para usar a classe .dark */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================
+   DARK MODE OVERRIDE LAYER
+   Usar CSS layers para garantir maior prioridade
+   ============================================ */
+@layer utilities {
+  /* Força textos cinza para cores mais claras no dark mode */
+  .dark .text-slate-500,
+  .dark .text-slate-600,
+  .dark .text-gray-500,
+  .dark .text-gray-600 {
+    color: #cbd5e1 !important;
+  }
+  
+  .dark .text-slate-700,
+  .dark .text-gray-700 {
+    color: #e2e8f0 !important;
+  }
+  
+  .dark .text-slate-800,
+  .dark .text-gray-800 {
+    color: #f1f5f9 !important;
+  }
+  
+  .dark .text-slate-900,
+  .dark .text-gray-900 {
+    color: #f8fafc !important;
+  }
+  
+  /* Background overrides */
+  .dark .bg-white {
+    background-color: #1e293b !important;
+  }
+  
+  .dark .bg-slate-50,
+  .dark .bg-gray-50 {
+    background-color: #0f172a !important;
+  }
+  
+  .dark .bg-slate-100,
+  .dark .bg-gray-100 {
+    background-color: #1e293b !important;
+  }
+  
+  /* Border overrides */
+  .dark .border-slate-100,
+  .dark .border-slate-200,
+  .dark .border-gray-100,
+  .dark .border-gray-200 {
+    border-color: #334155 !important;
+  }
+}
+
+/* ============================================
+   DARK MODE - FORCE CONTRAST FIX
+   Aplicado quando a classe .dark está no html
+   ============================================ */
+
+/* Override cores de texto cinza no modo dark */
+html.dark .text-slate-500,
+html.dark .text-slate-600,
+html.dark .text-gray-500,
+html.dark .text-gray-600 {
+  color: #cbd5e1 !important; /* slate-300 */
+}
+
+html.dark .text-slate-700,
+html.dark .text-gray-700 {
+  color: #e2e8f0 !important; /* slate-200 */
+}
+
+/* CardDescription e textos muted no dark mode */
+html.dark [class*="CardDescription"],
+html.dark .text-muted-foreground {
+  color: #cbd5e1 !important; /* slate-300 - mais claro */
+}
+
+/* Textos com classes slate-300, 400 - garantir visibilidade */
+html.dark .text-slate-300 {
+  color: #e2e8f0 !important; /* slate-200 */
+}
+
+html.dark .text-slate-400 {
+  color: #cbd5e1 !important; /* slate-300 */
+}
+
+/* Placeholders no dark mode */
+html.dark ::placeholder {
+  color: #64748b !important; /* slate-500 */
+  opacity: 1 !important;
+}
+
+/* Labels no dark mode */
+html.dark label,
+html.dark .label {
+  color: #e2e8f0 !important;
+}
+
+/* Textos dentro de cards escuros */
+html.dark .bg-slate-800 p,
+html.dark .bg-slate-700 p,
+html.dark .bg-gray-800 p,
+html.dark .bg-gray-700 p {
+  color: #e2e8f0;
+}
+
+/* Inputs no dark mode */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  color: #ffffff !important;
+  background-color: #334155 !important;
+  border-color: #475569 !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Badge text fixes */
+html.dark .badge,
+html.dark [class*="Badge"] {
+  color: inherit;
+}
+
+/* Card backgrounds no dark mode */
+html.dark .bg-white {
+  background-color: #1e293b !important;
+}
+
+html.dark .bg-slate-50,
+html.dark .bg-gray-50 {
+  background-color: #0f172a !important;
+}
+
+html.dark .bg-slate-100,
+html.dark .bg-gray-100 {
+  background-color: #1e293b !important;
+}
+
+/* Border colors no dark mode */
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-gray-100,
+html.dark .border-gray-200 {
+  border-color: #334155 !important;
+}
+
+/* Text colors no dark mode - force white for main text */
+html.dark .text-slate-900,
+html.dark .text-gray-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-slate-800,
+html.dark .text-gray-800 {
+  color: #f1f5f9 !important;
+}
+
+/* Headings in dark mode */
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+  color: #ffffff !important;
+}
+
+/* Card gradients fix */
+html.dark .from-slate-50,
+html.dark .from-gray-50 {
+  --tw-gradient-from: #1e293b !important;
+}
+
+html.dark .to-white {
+  --tw-gradient-to: #1e293b !important;
+}
+
+/* Hover states */
+html.dark .hover\:bg-slate-50:hover,
+html.dark .hover\:bg-gray-50:hover {
+  background-color: #334155 !important;
+}
+
+/* Focus states */
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+}
+
+@theme {
+  --color-primary-50: #E8F4FD;
+  --color-primary-100: #D0E8FA;
+  --color-primary-200: #9DCBF2;
+  --color-primary-300: #6AAEE5;
+  --color-primary-400: #3D8BD4;
+  --color-primary-500: #1E6BB8;
+  --color-primary-600: #1565B3;
+  --color-primary-700: #1157A0;
+  --color-primary-800: #0D4A8D;
+  --color-primary-900: #0A3A6E;
+
+  --color-secondary-50: #FFFAE6;
+  --color-secondary-100: #FFF5CC;
+  --color-secondary-200: #FFEB99;
+  --color-secondary-300: #FFE066;
+  --color-secondary-400: #FFD93D;
+  --color-secondary-500: #FFD100;
+  --color-secondary-600: #E8B423;
+  --color-secondary-700: #D4A01F;
+  --color-secondary-800: #B8891A;
+  --color-secondary-900: #8B6914;
+
+  --color-accent-green-50: #ECFDF3;
+  --color-accent-green-100: #D4F0E1;
+  --color-accent-green-200: #A8E4C4;
+  --color-accent-green-300: #6DD4A3;
+  --color-accent-green-400: #33B873;
+  --color-accent-green-500: #00A651;
+  --color-accent-green-600: #00874A;
+  --color-accent-green-700: #006B3C;
+  --color-accent-green-800: #005530;
+  --color-accent-green-900: #003D22;
+
+  --color-accent-cyan-50: #ECFBFF;
+  --color-accent-cyan-100: #D4F1FC;
+  --color-accent-cyan-200: #A8E4FA;
+  --color-accent-cyan-300: #66D4F7;
+  --color-accent-cyan-400: #33BEF2;
+  --color-accent-cyan-500: #00AEEF;
+  --color-accent-cyan-600: #008BC7;
+  --color-accent-cyan-700: #006B9E;
+  --color-accent-cyan-800: #005580;
+  --color-accent-cyan-900: #003D5C;
+
+  /* Semantic colors for shadcn/ui compatibility */
+  --color-background: #FFFFFF;
+  --color-foreground: #0f172a; /* Escurecido para melhor contraste */
+  --color-muted: #F1F5F9;
+  --color-muted-foreground: #475569; /* Escurecido para melhor contraste no modo claro */
+  --color-card: #FFFFFF;
+  --color-card-foreground: #0f172a; /* Escurecido para melhor contraste */
+  --color-popover: #FFFFFF;
+  --color-popover-foreground: #0f172a; /* Escurecido para melhor contraste */
+  --color-border: #E2E8F0;
+  --color-input: #E2E8F0;
+  --color-ring: #0D4A8D;
+  --color-destructive: #EF4444;
+  --color-destructive-foreground: #FFFFFF;
+
+  --shadow-card: 0 1px 3px rgba(13, 74, 141, 0.08), 0 1px 2px rgba(13, 74, 141, 0.06);
+  --shadow-card-hover: 0 10px 15px -3px rgba(13, 74, 141, 0.1), 0 4px 6px -2px rgba(13, 74, 141, 0.05);
+  --shadow-sidebar: 4px 0 6px -1px rgba(13, 74, 141, 0.1);
+}
+
+/* ============================================
+   DARK MODE SEMANTIC COLOR OVERRIDES
+   Sobrescreve variáveis do @theme quando .dark ativo
+   ============================================ */
+html.dark,
+:root.dark,
+.dark {
+  --color-background: #0f172a;
+  --color-foreground: #f1f5f9;
+  --color-muted: #1e293b;
+  --color-muted-foreground: #cbd5e1; /* Aumentado contraste de #94a3b8 para #cbd5e1 */
+  --color-card: #1e293b;
+  --color-card-foreground: #f1f5f9;
+  --color-popover: #1e293b;
+  --color-popover-foreground: #f1f5f9;
+  --color-border: #475569; /* Aumentado contraste de #334155 para #475569 */
+  --color-input: #475569;
+  color-scheme: dark;
+}
+
+/* Body styling for dark mode */
+html.dark body,
+.dark body {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+/* Card and white backgrounds in dark mode */
+html.dark .card,
+html.dark .bg-white,
+.dark .card,
+.dark .bg-white {
+  background-color: #1e293b !important;
+  color: #e2e8f0;
+}
+
+/* Border colors in dark mode */
+html.dark .border-gray-200,
+html.dark .border-slate-200,
+html.dark .border-gray-100,
+html.dark .border-slate-100,
+.dark .border-gray-200,
+.dark .border-slate-200,
+.dark .border-gray-100,
+.dark .border-slate-100 {
+  border-color: #334155 !important;
+}
+
+/* Text colors in dark mode */
+html.dark .text-gray-900,
+html.dark .text-slate-900,
+.dark .text-gray-900,
+.dark .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-gray-800,
+html.dark .text-slate-800,
+.dark .text-gray-800,
+.dark .text-slate-800 {
+  color: #f1f5f9 !important;
+}
+
+html.dark .text-gray-700,
+html.dark .text-slate-700,
+.dark .text-gray-700,
+.dark .text-slate-700 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .text-gray-600,
+html.dark .text-slate-600,
+.dark .text-gray-600,
+.dark .text-slate-600 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .text-gray-500,
+html.dark .text-slate-500,
+.dark .text-gray-500,
+.dark .text-slate-500 {
+  color: #cbd5e1 !important; /* Aumentado contraste de #94a3b8 para #cbd5e1 */
+}
+
+html.dark .text-gray-400,
+html.dark .text-slate-400,
+.dark .text-gray-400,
+.dark .text-slate-400 {
+  color: #e2e8f0 !important; /* Aumentado contraste */
+}
+
+html.dark .text-gray-300,
+html.dark .text-slate-300,
+.dark .text-gray-300,
+.dark .text-slate-300 {
+  color: #f1f5f9 !important; /* Aumentado contraste */
+}
+
+/* Background colors in dark mode */
+html.dark .bg-gray-50,
+html.dark .bg-slate-50,
+.dark .bg-gray-50,
+.dark .bg-slate-50 {
+  background-color: #0f172a !important;
+}
+
+html.dark .bg-gray-100,
+html.dark .bg-slate-100,
+.dark .bg-gray-100,
+.dark .bg-slate-100 {
+  background-color: #1e293b !important;
+}
+
+/* Gradient fixes for dark mode */
+html.dark .from-slate-50,
+html.dark .from-gray-50,
+.dark .from-slate-50,
+.dark .from-gray-50 {
+  --tw-gradient-from: #1e293b !important;
+}
+
+html.dark .to-white,
+.dark .to-white {
+  --tw-gradient-to: #1e293b !important;
+}
+
+/* Headings in dark mode */
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6,
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: #ffffff !important;
+}
+
+/* Labels in dark mode */
+html.dark label,
+html.dark .label,
+.dark label,
+.dark .label {
+  color: #e2e8f0 !important;
+}
+
+/* Inputs in dark mode */
+html.dark input,
+html.dark textarea,
+html.dark select,
+.dark input,
+.dark textarea,
+.dark select {
+  color: #ffffff !important;
+  background-color: #334155 !important;
+  border-color: #475569 !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder,
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #cbd5e1 !important; /* Aumentado contraste de #94a3b8 para #cbd5e1 */
+}
+
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus,
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Hover states in dark mode */
+html.dark .hover\:bg-slate-50:hover,
+html.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-slate-50:hover,
+.dark .hover\:bg-gray-50:hover {
+  background-color: #334155 !important;
+}
+
+/* CardDescription and muted text in dark mode - High Contrast */
+html.dark .text-muted-foreground,
+.dark .text-muted-foreground,
+html.dark [class*="CardDescription"],
+.dark [class*="CardDescription"] {
+  color: #e2e8f0 !important; /* Aumentado para máximo contraste */
+}
+
+/* Paragraph text in dark mode */
+html.dark p,
+.dark p {
+  color: #e2e8f0;
+}
+
+/* Small text in dark mode */
+html.dark .text-sm,
+html.dark .text-xs,
+.dark .text-sm,
+.dark .text-xs {
+  color: #e2e8f0;
+}
+
+/* Ensure table header text is visible in dark mode */
+html.dark th,
+.dark th {
+  color: #e2e8f0 !important;
+}
+
+/* Ensure table cell text is visible in dark mode */
+html.dark td,
+.dark td {
+  color: #f1f5f9;
+}
+
+/* Improve badge contrast in dark mode */
+html.dark .badge,
+.dark .badge {
+  font-weight: 600;
+}
+
+/* Fix any remaining gray text */
+html.dark [class*="text-gray"],
+html.dark [class*="text-slate"],
+.dark [class*="text-gray"],
+.dark [class*="text-slate"] {
+  --tw-text-opacity: 1;
+}
+
+:root {
+  --primary-900: #0A3A6E;
+  --primary-800: #0D4A8D;
+  --primary-700: #1157A0;
+  --primary-600: #1565B3;
+  --primary-500: #1E6BB8;
+  --primary-400: #3D8BD4;
+  --primary-300: #6AAEE5;
+  --primary-200: #9DCBF2;
+  --primary-100: #D0E8FA;
+  --primary-50: #E8F4FD;
+
+  --secondary-900: #8B6914;
+  --secondary-800: #B8891A;
+  --secondary-700: #D4A01F;
+  --secondary-600: #E8B423;
+  --secondary-500: #FFD100;
+  --secondary-400: #FFD93D;
+  --secondary-300: #FFE066;
+  --secondary-200: #FFEB99;
+  --secondary-100: #FFF5CC;
+  --secondary-50: #FFFAE6;
+
+  --accent-green-600: #00874A;
+  --accent-green-500: #00A651;
+  --accent-green-400: #33B873;
+  --accent-green-100: #D4F0E1;
+
+  --accent-cyan-600: #008BC7;
+  --accent-cyan-500: #00AEEF;
+  --accent-cyan-400: #33BEF2;
+  --accent-cyan-100: #D4F1FC;
+
+  --gray-900: #1A1A2E;
+  --gray-800: #2D2D44;
+  --gray-700: #404055;
+  --gray-600: #5C5C6E;
+  --gray-500: #7A7A8C;
+  --gray-400: #9999A8;
+  --gray-300: #B8B8C4;
+  --gray-200: #D6D6DE;
+  --gray-100: #EBEBEF;
+  --gray-50: #F5F5F7;
+
+  --success: #00A651;
+  --warning: #FFD100;
+  --error: #DC3545;
+  --info: #00AEEF;
+
+  --color-primary: #0D4A8D;
+  --color-primary-light: #1E6BB8;
+  --color-primary-dark: #0A3A6E;
+  --color-secondary: #FFD100;
+  --color-accent-green: #00A651;
+  --color-accent-cyan: #00AEEF;
+
+  --bg-primary: #F5F7FA;
+  --bg-secondary: #FFFFFF;
+  --bg-sidebar: #0D4A8D;
+
+  --text-primary: #1F2937;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+  --text-light: #9CA3AF;
+  --text-on-primary: #FFFFFF;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+/* Textos em cards e áreas claras - garantir contraste */
+.card, [class*="bg-white"] {
+  color: #1F2937;
+}
+
+/* Labels e textos pequenos */
+.text-label {
+  color: #6B7280;
+}
+
+/* Links com cor azul escura */
+a:not([class*="text-"]) {
+  color: #0D4A8D;
+}
+
+a:not([class*="text-"]):hover {
+  color: #1E6BB8;
+}
+
+@layer components {
+  .bg-gradient-parnamirim {
+    background: linear-gradient(180deg, #0D4A8D 0%, #0A3A6E 100%);
+  }
+
+  .bg-gradient-header {
+    background: linear-gradient(90deg, #0D4A8D 0%, #1565B3 100%);
+  }
+
+  .btn-primary {
+    @apply bg-primary-800 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-700 active:bg-primary-900 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-500 text-primary-900 px-4 py-2 rounded-lg font-medium hover:bg-secondary-400 active:bg-secondary-600 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary-800 text-primary-800 px-4 py-2 rounded-lg font-medium hover:bg-primary-800 hover:text-white transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-lg border border-gray-100 transition-shadow duration-200 ease-in-out;
+  }
+
+  .card-hover {
+    @apply hover:shadow-xl;
+  }
+
+  .input {
+    @apply w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 ease-in-out placeholder:text-gray-400;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-primary { background-color: #DBEAFE; color: #1E40AF; }
+  .badge-success { background-color: #D1FAE5; color: #065F46; }
+  .badge-warning { background-color: #FEF3C7; color: #92400E; }
+  .badge-danger { background-color: #FEE2E2; color: #991B1B; }
+  .badge-info { background-color: #CFFAFE; color: #0E7490; }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-primary-100 hover:bg-primary-700/50 transition-all duration-200 ease-in-out;
+  }
+
+  .sidebar-link-active {
+    @apply bg-secondary-500 text-primary-900 font-medium hover:bg-secondary-400;
+  }
+
+  .status-open { background-color: #DBEAFE; color: #1E40AF; }
+  .status-in-progress { background-color: #FEF3C7; color: #92400E; }
+  .status-resolved { background-color: #D1FAE5; color: #065F46; }
+  .status-closed { background-color: #F3F4F6; color: #374151; }
+
+  .priority-low { background-color: #F3F4F6; color: #374151; }
+  .priority-medium { background-color: #DBEAFE; color: #1E40AF; }
+  .priority-high { background-color: #FFEDD5; color: #9A3412; }
+  .priority-critical { background-color: #FEE2E2; color: #991B1B; }
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #F5F5F7; border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: #B8B8C4; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #9999A8; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+.animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+.animate-slide-in { animation: slideIn 0.3s ease-out forwards; }
+.animate-pulse-slow { animation: pulse-slow 2s ease-in-out infinite; }
+
+.loader {
+  border: 3px solid #E8F4FD;
+  border-top: 3px solid #0D4A8D;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* ========================================
+   CORREÇÃO DE CONTRASTE - FUNDO ESCURO
+   ======================================== */
+
+/* Sidebar e áreas com fundo azul escuro - textos claros */
+aside,
+.sidebar,
+.bg-gradient-parnamirim,
+[class*="bg-primary-8"],
+[class*="bg-primary-9"],
+[class*="bg-blue-8"],
+[class*="bg-blue-9"] {
+  color: #FFFFFF;
+}
+
+/* Textos secundários em fundo escuro */
+aside .text-xs,
+aside .text-sm,
+.sidebar .text-xs,
+.sidebar .text-sm,
+.bg-gradient-parnamirim .text-xs,
+.bg-gradient-parnamirim .text-sm {
+  color: #BFDBFE !important; /* blue-200 */
+}
+
+/* Títulos em fundo escuro */
+aside h1, aside h2, aside h3,
+.sidebar h1, .sidebar h2, .sidebar h3,
+.bg-gradient-parnamirim h1,
+.bg-gradient-parnamirim h2,
+.bg-gradient-parnamirim h3 {
+  color: #FFFFFF !important;
+}
+
+/* Parágrafos em fundo escuro */
+.bg-gradient-parnamirim p {
+  color: #E0F2FE !important; /* sky-100 */
+}
+
+/* Menu items no sidebar */
+aside a,
+.sidebar a {
+  color: #E0F2FE !important; /* sky-100 */
+}
+
+aside a:hover,
+.sidebar a:hover {
+  color: #FFFFFF !important;
+}
+
+/* Menu ativo */
+aside a[class*="bg-white"],
+.sidebar a[class*="bg-white"] {
+  color: #1F2937 !important;
+}
+
+/* Alerta no sidebar */
+aside [class*="bg-white/"],
+.sidebar [class*="bg-white/"] {
+  color: #FFFFFF !important;
+}
+
+/* ========================================
+   CORREÇÃO DE CONTRASTE - FUNDO CLARO
+   ======================================== */
+
+/* Cards e áreas brancas - texto escuro */
+.card,
+.bg-white,
+[class*="rounded-xl"][class*="shadow"],
+[class*="rounded-2xl"][class*="shadow"],
+[class*="rounded-3xl"][class*="shadow"] {
+  color: #1F2937;
+}
+
+/* Títulos em cards */
+.card h1, .card h2, .card h3, .card h4,
+.bg-white h1, .bg-white h2, .bg-white h3, .bg-white h4 {
+  color: #111827 !important;
+}
+
+/* Números grandes (stats) */
+.text-4xl,
+.text-3xl,
+.text-2xl {
+  color: #111827;
+}
+
+/* CardTitle e CardDescription do shadcn */
+[class*="CardTitle"] {
+  color: #111827 !important;
+}
+
+[class*="CardDescription"] {
+  color: #6B7280 !important;
+}
+
+/* ========================================
+   ENTERPRISE ANIMATIONS
+   ======================================== */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.animate-fade-in-enterprise { animation: fade-in 0.2s ease-out; }
+.animate-fade-in-up { animation: fade-in-up 0.3s ease-out; }
+.animate-fade-in-down { animation: fade-in-down 0.3s ease-out; }
+.animate-scale-in { animation: scale-in 0.2s ease-out; }
+.animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
+.animate-slide-in-left { animation: slide-in-left 0.3s ease-out; }
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+}
+.animate-pulse-ring { animation: pulse-ring 2s infinite; }
+.animate-bounce-in { animation: bounce-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+
+/* ========================================
+   SMOOTH TRANSITIONS
+   ======================================== */
+
+.transition-smooth {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   HOVER EFFECTS
+   ======================================== */
+
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hover-glow {
+  transition: box-shadow 0.2s ease;
+}
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+/* ========================================
+   CRITICAL: FORCE CONTRAST ON DARK BACKGROUNDS
+   Para páginas que usam fundo escuro diretamente
+   ======================================== */
+
+/* Override gray text that becomes illegible on dark backgrounds */
+.bg-slate-900 .text-gray-500,
+.bg-slate-900 .text-gray-600,
+.bg-slate-900 .text-gray-700,
+.bg-gray-900 .text-gray-500,
+.bg-gray-900 .text-gray-600,
+.bg-gray-900 .text-gray-700,
+.bg-slate-800 .text-gray-500,
+.bg-slate-800 .text-gray-600,
+.bg-slate-800 .text-gray-700 {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+.bg-slate-900 .text-slate-500,
+.bg-slate-900 .text-slate-600,
+.bg-slate-900 .text-slate-700,
+.bg-gray-900 .text-slate-500,
+.bg-gray-900 .text-slate-600,
+.bg-gray-900 .text-slate-700,
+.bg-slate-800 .text-slate-500,
+.bg-slate-800 .text-slate-600,
+.bg-slate-800 .text-slate-700 {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+/* Ensure white/light text on dark backgrounds */
+.bg-slate-900 h1,
+.bg-slate-900 h2,
+.bg-slate-900 h3,
+.bg-slate-900 h4,
+.bg-gray-900 h1,
+.bg-gray-900 h2,
+.bg-gray-900 h3,
+.bg-gray-900 h4,
+.bg-slate-800 h1,
+.bg-slate-800 h2,
+.bg-slate-800 h3,
+.bg-slate-800 h4 {
+  color: #ffffff !important;
+}
+
+/* ========================================
+   DARK MODE UTILITY CLASSES
+   ======================================== */
+
+/* Text utilities for dark backgrounds */
+.dark-text-primary {
+  color: #ffffff !important;
+}
+
+.dark-text-secondary {
+  color: #e2e8f0 !important;
+}
+
+.dark-text-muted {
+  color: #94a3b8 !important;
+}
+
+.dark-text-accent {
+  color: #60a5fa !important;
+}
+
+/* Label styling for dark mode */
+.dark-label {
+  color: #94a3b8 !important;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Card styles for dark mode */
+.dark-card {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+}
+
+.dark-card:hover {
+  background-color: #334155;
+}
+
+/* Input styles for dark mode */
+.dark-input {
+  background-color: #1e293b !important;
+  border-color: #475569 !important;
+  color: #ffffff !important;
+}
+
+.dark-input::placeholder {
+  color: #64748b !important;
+}
+
+.dark-input:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Badge styles for dark mode */
+.badge-dark-success {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.badge-dark-warning {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.badge-dark-error {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.badge-dark-info {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+/* Table styles for dark mode */
+.table-dark thead {
+  background-color: rgba(30, 41, 59, 0.5);
+}
+
+.table-dark th {
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.table-dark td {
+  color: #e2e8f0;
+}
+
+.table-dark tbody tr {
+  border-color: #334155;
+}
+
+.table-dark tbody tr:hover {
+  background-color: rgba(51, 65, 85, 0.5);
+}
+
+/* Stat card styles for dark mode */
+.stat-card-dark {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.stat-card-dark-label {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-card-dark-value {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+/* =====================================================
+   MAP COMPONENT STYLES
+   ===================================================== */
+
+/* Custom marker - ESTÁTICO sem animações para evitar tremor */
+.custom-marker {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  cursor: pointer !important;
+  /* SEM transições para evitar tremor nos markers */
+}
+
+.custom-marker:hover {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
+  /* SEM scale ou translateY para evitar tremor */
+}
+
+/* Cluster marker styles - também estático */
+.cluster-marker {
+  cursor: pointer !important;
+}
+
+.cluster-marker:hover {
+  filter: brightness(1.1);
+}
+
+/* Garantir que markers Leaflet não pisquem */
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Limitar z-index do container Leaflet para não sobrepor Dialogs */
+.leaflet-container {
+  z-index: 1 !important;
+  position: relative !important;
+}
+
+/* Garantir z-index correto para markers dentro do mapa */
+.leaflet-pane {
+  z-index: 400 !important;
+}
+
+.leaflet-overlay-pane {
+  z-index: 401 !important;
+}
+
+.leaflet-marker-pane {
+  z-index: 402 !important;
+}
+
+.leaflet-tooltip-pane {
+  z-index: 450 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 460 !important;
+}
+
+/* Garantir que controles do Leaflet fiquem dentro do mapa */
+.leaflet-control-container {
+  z-index: 500 !important;
+}
+
+/* Leaflet popup customization */
+.leaflet-popup-content-wrapper {
+  background: var(--background) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px !important;
+  color: inherit !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--background) !important;
+  border-left: 1px solid var(--border) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.leaflet-popup-close-button {
+  color: var(--muted-foreground) !important;
+  top: 8px !important;
+  right: 8px !important;
+  font-size: 20px !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: var(--foreground) !important;
+}
+
+/* Leaflet controls */
+.leaflet-control-zoom {
+  border: 1px solid var(--border) !important;
+  background: rgb(var(--background-rgb) / 0.95) !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+  border-radius: 8px !important;
+}
+
+.leaflet-control-zoom a {
+  color: var(--foreground) !important;
+  background: transparent !important;
+  border: none !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+}
+
+.leaflet-control-zoom a:first-child {
+  border-radius: 8px 8px 0 0 !important;
+}
+
+.leaflet-control-zoom a:last-child {
+  border-radius: 0 0 8px 8px !important;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  border-color: var(--border) !important;
+}
+
+/* Attribution */
+.leaflet-control-attribution {
+  background: rgb(var(--background-rgb) / 0.8) !important;
+  color: var(--muted-foreground) !important;
+  font-size: 0.75rem !important;
+  backdrop-filter: blur(8px) !important;
+  padding: 2px 6px !important;
+}
+
+/* Map container focus */
+.leaflet-container:focus {
+  outline: none !important;
+}
+
+/* Pulse animation for urgent markers */
+@keyframes urgent-marker-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.85;
+  }
+}
+
+.urgent-marker-animation {
+  animation: urgent-marker-pulse 2s ease-in-out infinite;
+}
+
+/* Map loading skeleton */
+.map-skeleton {
+  background: hsl(var(--muted));
+  animation: skeleton-shimmer 1.5s ease-in-out infinite, pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--muted) / 0.5) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Map overlay transitions */
+.map-overlay-panel {
+  animation: map-panel-slide-in 0.2s ease-out;
+}
+
+@keyframes map-panel-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode map tiles adjustment */
+.dark .leaflet-tile-pane {
+  filter: brightness(0.9) contrast(1.1);
+}
+
+/* Scrollbar for map sidebar */
+.map-sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.map-sidebar-scroll::-webkit-scrollbar-track {
+  background: hsl(var(--muted) / 0.3);
+  border-radius: 9999px;
+}
+
+.map-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.2);
+  border-radius: 9999px;
+}
+
+.map-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.3);
+}
+
+/* ============================================
+   ANIMAÇÕES ENTERPRISE
+   ============================================ */
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.3s ease-out;
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.3s ease-out;
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+.animate-fade-out {
+  animation: fade-out 0.2s ease-out;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s ease-out;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.hover-scale {
+  transition: transform 0.2s;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(30, 107, 184, 0.3);
+}
+
+/* Transition Classes */
+.transition-fast {
+  transition-duration: 150ms;
+}
+
+.transition-normal {
+  transition-duration: 200ms;
+}
+
+.transition-slow {
+  transition-duration: 300ms;
+}
+
+/* Loading States */
+.loading-dots::after {
+  content: '';
+  animation: loading-dots 1.5s infinite;
+}
+
+@keyframes loading-dots {
+  0% {
+    content: '';
+  }
+  25% {
+    content: '.';
+  }
+  50% {
+    content: '..';
+  }
+  75% {
+    content: '...';
+  }
+}
+
+/* Focus Ring */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+}
+
+/* =====================================================
+   DIALOG/MODAL Z-INDEX FIX - Sobrepor o mapa Leaflet
+   ===================================================== */
+
+/* Garantir que Dialogs/Modals apareçam sobre o mapa */
+[data-radix-portal] {
+  z-index: 9999 !important;
+}
+
+/* Overlay do Dialog */
+[data-radix-dialog-overlay],
+.fixed.inset-0.z-50 {
+  z-index: 9998 !important;
+}
+
+/* Conteúdo do Dialog */
+[data-radix-dialog-content] {
+  z-index: 9999 !important;
+}
+
+/* Sheet overlay */
+[data-radix-alert-dialog-overlay],
+[data-radix-dropdown-menu-content],
+[data-radix-popover-content] {
+  z-index: 9997 !important;
+}
+
+/* Container do mapa deve ter z-index menor */
+.leaflet-container {
+  z-index: 1 !important;
+}
+
+/* Controles do mapa */
+.leaflet-control-container {
+  z-index: 400 !important;
+}
+
+/* Glass Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dark .glass {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-500), var(--accent-cyan-500));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Staggered Animation Helper */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+

@@ -1,0 +1,401 @@
+// Prisma Schema - Sistema de Gestão Urbana Parnamirim/RN
+// PostgreSQL with PostGIS extension
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis]
+}
+
+// ==================== ENUMS ====================
+
+enum Role {
+  ADMIN
+  COORDINATOR
+  SECRETARY_HEAD
+  OPERATOR
+  VIEWER
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum DemandStatus {
+  OPEN
+  IN_PROGRESS
+  PENDING
+  WAITING_INFO
+  FORWARDED
+  RESOLVED
+  CLOSED
+  CANCELLED
+}
+
+enum DemandSource {
+  WHATSAPP
+  WEB
+  PHONE
+  PRESENTIAL
+  APP
+  INTERNAL
+}
+
+enum AttachmentType {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+}
+
+enum MessageDirection {
+  INCOMING
+  OUTGOING
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+enum NotificationType {
+  NEW_DEMAND
+  DEMAND_UPDATE
+  DEMAND_ASSIGNED
+  DEMAND_RESOLVED
+  SLA_WARNING
+  SLA_EXPIRED
+  SYSTEM
+}
+
+// ==================== MODELS ====================
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(OPERATOR)
+  phone         String?
+  avatar        String?
+  secretaryId   String?
+  secretary     Secretary? @relation(fields: [secretaryId], references: [id])
+  isActive      Boolean   @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  assignedDemands Demand[]        @relation("AssignedDemands")
+  createdDemands  Demand[]        @relation("CreatedDemands")
+  demandHistory   DemandHistory[]
+  notifications   Notification[]
+  auditLogs       AuditLog[]
+  refreshTokens   RefreshToken[]
+  comments        DemandComment[] @relation("UserComments")
+
+  @@index([email])
+  @@index([secretaryId])
+  @@index([role])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+  @@map("refresh_tokens")
+}
+
+model Secretary {
+  id          String   @id @default(uuid())
+  name        String
+  acronym     String   @unique
+  slug        String   @unique
+  description String?
+  color       String?
+  icon        String?
+  phone       String?
+  email       String?
+  address     String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  users      User[]
+  categories Category[]
+  demands    Demand[]
+
+  @@index([acronym])
+  @@index([slug])
+  @@map("secretaries")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String
+  description String?
+  secretaryId String
+  secretary   Secretary @relation(fields: [secretaryId], references: [id])
+  priority    Priority  @default(MEDIUM)
+  slaDays     Int       @default(15)
+  icon        String?
+  color       String?
+  keywords    String[]  // For AI classification
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  demands Demand[]
+
+  @@unique([secretaryId, slug])
+  @@index([secretaryId])
+  @@index([slug])
+  @@map("categories")
+}
+
+model Demand {
+  id          String       @id @default(uuid())
+  protocol    String       @unique
+  title       String
+  description String       @db.Text
+  status      DemandStatus @default(OPEN)
+  priority    Priority     @default(MEDIUM)
+  source      DemandSource
+
+  // Geolocation (PostGIS)
+  latitude    Float?
+  longitude   Float?
+  address     String?
+  neighborhood String?
+  reference   String?
+  // location Unsupported("geometry(Point, 4326)")?
+
+  // Relations
+  categoryId   String
+  category     Category  @relation(fields: [categoryId], references: [id])
+  secretaryId  String
+  secretary    Secretary @relation(fields: [secretaryId], references: [id])
+  assignedToId String?
+  assignedTo   User?     @relation("AssignedDemands", fields: [assignedToId], references: [id])
+  createdById  String?
+  createdBy    User?     @relation("CreatedDemands", fields: [createdById], references: [id])
+
+  // Citizen info (can be anonymous)
+  requesterName   String?
+  requesterCpf    String?
+  requesterPhone  String?
+  requesterEmail  String?
+  isAnonymous     Boolean @default(false)
+
+  // AI Classification metadata
+  aiClassification Json?
+  aiConfidence     Float?
+  aiSuggestions    Json?
+
+  // Dates
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  slaDeadline DateTime?
+  resolvedAt  DateTime?
+  closedAt    DateTime?
+
+  // Metrics
+  resolutionTimeHours Int?
+  satisfactionRating  Int?    // 1-5
+  isOverdue           Boolean @default(false)
+
+  // Relations
+  attachments Attachment[]
+  history     DemandHistory[]
+  messages    WhatsAppMessage[]
+  comments    DemandComment[]
+
+  @@index([protocol])
+  @@index([status])
+  @@index([priority])
+  @@index([categoryId])
+  @@index([secretaryId])
+  @@index([assignedToId])
+  @@index([createdAt])
+  @@index([requesterPhone])
+  @@map("demands")
+}
+
+model Attachment {
+  id         String         @id @default(uuid())
+  demandId   String
+  demand     Demand         @relation(fields: [demandId], references: [id], onDelete: Cascade)
+  type       AttachmentType
+  url        String
+  filename   String
+  mimeType   String
+  size       Int
+  aiAnalysis Json?          // AI image analysis results
+  createdAt  DateTime       @default(now())
+
+  @@index([demandId])
+  @@map("attachments")
+}
+
+model DemandHistory {
+  id             String   @id @default(uuid())
+  demandId       String
+  demand         Demand   @relation(fields: [demandId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id])
+  action         String
+  description    String?
+  previousStatus DemandStatus?
+  newStatus      DemandStatus?
+  metadata       Json?
+  createdAt      DateTime @default(now())
+
+  @@index([demandId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("demand_history")
+}
+
+model DemandComment {
+  id         String   @id @default(uuid())
+  demandId   String
+  demand     Demand   @relation(fields: [demandId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation("UserComments", fields: [userId], references: [id])
+  content    String   @db.Text
+  isInternal Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([demandId])
+  @@map("demand_comments")
+}
+
+model WhatsAppSession {
+  id          String   @id @default(uuid())
+  phone       String   @unique
+  name        String?
+  isActive    Boolean  @default(true)
+  lastMessage DateTime?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  messages WhatsAppMessage[]
+
+  @@index([phone])
+  @@map("whatsapp_sessions")
+}
+
+model WhatsAppMessage {
+  id          String           @id @default(uuid())
+  sessionId   String
+  session     WhatsAppSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  demandId    String?
+  demand      Demand?          @relation(fields: [demandId], references: [id])
+  direction   MessageDirection
+  content     String           @db.Text
+  mediaUrl    String?
+  mediaType   String?
+  status      MessageStatus    @default(PENDING)
+  aiProcessed Boolean          @default(false)
+  metadata    Json?
+  createdAt   DateTime         @default(now())
+
+  @@index([sessionId])
+  @@index([demandId])
+  @@index([createdAt])
+  @@map("whatsapp_messages")
+}
+
+model Neighborhood {
+  id         String  @id @default(uuid())
+  name       String
+  code       String  @unique
+  population Int?
+  area       Float?  // km²
+  // geometry Unsupported("geometry(Polygon, 4326)")
+
+  @@index([code])
+  @@map("neighborhoods")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   @default("info")
+  readAt    DateTime?
+  data      Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([readAt])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  entity    String
+  entityId  String?
+  details   Json?
+  oldData   Json?
+  newData   Json?
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([entity, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model SystemSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("system_settings")
+}
+
+model ResponseTemplate {
+  id          String   @id @default(uuid())
+  name        String
+  category    String?
+  content     String   @db.Text
+  variables   String[] // Placeholders like {protocol}, {status}
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("response_templates")
+}

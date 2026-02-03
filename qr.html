@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEMSUR - Conectar WhatsApp</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 { color: #10b981; margin-bottom: 10px; }
+        h2 { color: #9ca3af; font-weight: normal; margin-bottom: 30px; }
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        .qr-container img { width: 300px; height: 300px; }
+        .instructions {
+            background: rgba(16, 185, 129, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: left;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .instructions h3 { color: #10b981; margin-top: 0; }
+        .instructions ol { padding-left: 20px; line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏛️ SEMSUR</h1>
+        <h2>Secretaria Municipal de Serviços Urbanos</h2>
+        
+        <div class="qr-container">
+            <img src="data:image/png;base64,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" alt="QR Code SEMSUR">
+        </div>
+        
+        <div class="instructions">
+            <h3>📱 Como conectar:</h3>
+            <ol>
+                <li>Abra o <strong>WhatsApp</strong> no seu celular</li>
+                <li>Vá em <strong>Configurações</strong> (⚙️)</li>
+                <li>Toque em <strong>Dispositivos Conectados</strong></li>
+                <li>Toque em <strong>Conectar um Dispositivo</strong></li>
+                <li>Escaneie este QR Code</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
